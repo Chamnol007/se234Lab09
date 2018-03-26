@@ -13,4 +13,4 @@ env:
 
 addons:
   ssh_known_hosts:
-       - 34.216.181.22
+       - 172.31.31.232
