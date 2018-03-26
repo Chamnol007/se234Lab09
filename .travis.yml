@@ -6,11 +6,11 @@ install: true
 script: true
 after_success:
     - ls -l
-    - scp -i "se234.pem" -r html/* ubuntu@172.31.31.232:/var/www/html/
+    - scp -i "se234.pem" -r html/* ubuntu@54.255.174.42:/var/www/html/
 env:
   global:
     secure: dGS/sVHgdwYJT9YgLwEzW2rleoQRkkPwYEBFy6Kgtxz0Y8QqTQbrhU645Ett1Ci8oYfv+ktKppZFtjTuPr9pFNGGMre/lnnSUjXI44itTz2ba2P7obSee/Y6D/dpD/XT5IKgbMthtAyRNj08blKMBsUtR7zCoKB1YX1RAER0mNHMn0ATNszO5z/vOFFOApPZRvJjpf2zJsx6qo84EO5gjov1IL5jp5kGQKNzoiTSAQnhXQ6KoUwekrEa6279MNjwdxW8pDzKrFEWW+kNbmLtcgT4q09VPzV2As2NvBLWTh6dask+6I1W0zz86fAUdhiYl4tmGyVcnv74xdUi2OyCF5zVjj6GuSZ6/j9m1Xk/kUEfPo67j0GT9JNmCsA7iGbyF8xMO2lqP7/PJV6Zlqc/S1VmzcxihbNmFVRqmxzpMCygBfwLe7teZuNDvRayS12nDx4G/79IJeun6iJR7yJ5PberD8lZdA/lRSEKIPYWXYFLa7EcnMVaRapKMePf3tmWfJrdKavMArqGkoweVTy7LjtnuAx3CrKwK2gyvcaF0VJJJlo2BKUyljm2dd6WkbMOCx/TwhjVMohVhsc0ZYiCEUwhDTqnJVNTJx5YfC6kp+1ATSqEofL8UvFNSZv7e6OuAGEYJzf1EvNubMNGxltPCvLS6wwLNsBGgnr0dzdYDQQ=
 
 addons:
   ssh_known_hosts:
-       - 172.31.31.232
+       - 54.255.174.42
