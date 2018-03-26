@@ -1,6 +1,6 @@
 language: node_js
 before_install:
-    - openssl aes-256-cbc -k "12345678" -in se234.pem-out se234.pem.enc
+    - openssl aes-256-cbc -k "12345678" -in se234.pem -out se234.pem.enc
     - openssl aes-256-cbc -k "$super_secret_password" -in se234.pem.enc -out se234.pem -d
     - sudo chmod 400 se234.pem
 install: true
