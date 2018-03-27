@@ -1,12 +1,20 @@
 language: node_js
+sudo: required
 before_install:
-    - openssl aes-256-cbc -k "$super_secret_password" -in se234.pem.enc -out se234.pem -d
-    - sudo chmod 400 se234.pem
+- docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
 install: true
-script: true
+before_script:
+- export DOCKER_HOST="$HOST_NAME"
+script:
+  - docker build -t $DOCKER_USERNAME/htmltest .
+  - docker push $DOCKER_USERNAME/htmltest
 after_success:
-    - ls -l
-    - scp -i "se234.pem" -r html/* ubuntu@172.31.31.232:/var/www/html/
-addons:
-  ssh_known_hosts:
-       - 172.31.31.232
+- docker stop htmltest
+- docker rm htmltest
+- docker run -p 8088:80 -d --name htmltest $DOCKER_USERNAME/htmltest:latest
+service: docker
+env:
+  global:
+  - secure: pWgtCzAwqIBq7zc4faAIWN8cgG0X1Md7cNn/7DwiYC++EYZmX1clTAfD/+MM6TmFXVWRlEJ/UldVy6jDgAOeTsZQtKnRdHxFu+j1XQFWC1G0pXr960vP5dgFexCek9draOuc0SnhahveWW9PDJpz6cqMaqlrTIfnVU65f7QkMGHJjZzupfkpdg8usyqRkf4Nv8NU2dpqZmzVyAcxkFwClexlOzQ0ClDNUt1lnT5UEHpQWpWZ9CTMR8BFOr+O2/+yi7GqcJs0B+o9s1wgQrSQ4g4TlRk/FnXpMQtFyxWvK/x1t8aTdvc8SqS3vn5fjefh1VddBriiQgeTARTGKxQM/jkYDABnVzNqTUwkuWKK6ztPUG9Gk73V48JaxQ6n0XIo6N0T9XqtUIj+Pp0P+IQsXjrWJX8kYXh+BDB2TA4iT018ZM/aNv4lIHk3VyoipFnbUaIjpHTKjz/qf67akv7C2P68oxauKFL1e8tqYvgNzBxQGPSKsh4a3gX/g16qGvCZR49sj/a4Z9Mwit80OHXmjgNDvW4N79bMVAUgOByDRiO8E9uQ7P23IduBfSv/NbBrMbRMo/qNrbro/rZlsjQBGmaybOTnn55L3U77UYpBhzQmDumSYnyihwEuP8y/FNos8qaTxPiJpdyy5cUCeu8e2GRRjwds7ADh/YV/BpAkijQ=
+  - secure: s/2iflT+WmN5wOpcS7urt9Ee7bhXnvsu/qFJHfw/q53c0ldC/BxblPz0hEHIVQ1kOA0kVhEoIlPJbUqOt69yx7JRH6bI1NNUFS5A6Uq18MWSORB7jz+3kKEWAOuCwgVD1PVVx7rOozXv16zapaPI1c0cJuGynhQtmsl6qwHEaj1GgZ7cb6+dlql0qwXdkOEdCtXhg/xTmeVhZqXHyp7jc9yQ4TsGb2B2y+M2gKRXNdEyvD/A4lk37rjqWmphU9XOL34Hv8J99ONTnLFNpOKCy+u+CNpreWpzTSsEJiJO2JeJknbxD3ottUQs4uOp/CM9D3LtXJAOYUYQ+h7Fpldb9GAkfo7+p66wf4e8V6QeETEsBlBuczARNKT6kOIrsaZp7iHBLQB9QE8OZBvscsF1s4bMX0bRBF5nRkFrvE1aJ7luyCBCOZU+BszOmOzCpLTLMdFtJC0M1Rtjtipz1FqZqZiX/RSC/KPRZJAcnYHl1j+fAX0knhoJfpFg6gCXTran7Wx6M/01aPf4FxJQrrH7bXsxpqwQG2VHGM3tO+f3O5vfyZEjnDeFJMXdf7HCoAYqfL7tGESS1j4fkUwBTXq/kYZNrSyGQrDba3bmG5tbkME4t4nKeq3ABRrjh8OsVBZUoMG1y7FftiGUlc9MylgX4K0LyQiKdMGKhVPTcjN5csA=
+  - secure: PcPH1fqMsFZGrY2gt6QDJ+qjWWgWv2Td9VR48drymsJtpChPiOaMAvI2TnrKkd5a45ZYeXoHW/QvixhyOJxQtL3SBL5Y98X/6/05YdZQSb1dnxpx/ATqTGfA9/CVKhaxxsi3wxhZhNgDF1K2z/MrFkhQ1/XkYhw7Svcs8UQB/ofjfks/SmYgTA7Ge7OfhOTwurhCODQW5KNVEFTFdil2Wy+rxjXrUDBuKbhh0kLHWtfM7aZ7RCS6MV5VosVkSoBCPjPggGyY8GgFFhXUyFtgJ+cbShC7gcw+phko92NFPVY+dKKx/aRT2PGQ51ba79T3B94hEwPID/iYWQQE4+YKuYNsLrjcAVYuLE2R16cYKaKcO5RL23ZjsqpzgmZwuo6taRJvKftj5MLfQG4Cm3IMJWbfPJZd4n2StNQO/lPa+xZUpxLgQgzOn6w5yZXLDjr8FlN6hFno0eTfYFnnlltoG8hMCssHxR9AdaTYD6o/N6srR/3jbcyGd0a7AHjF5zfnAeDQ7FXDxUP+LKe7BbxvbawPU1Q4shfq00+sTdmZVfZyLwpPu6cDzOfscX6g5ao4Qo+hz8fl55LEBO2lEvX0ozwZhCcG7ATKhWIAAs7Jy34t/xaKYZZ4BXG7rwqn1a8kU8E3N4eFOaJ5WMlOO8T//MJ45AqJUH7zDTu4QwmSXSU=
